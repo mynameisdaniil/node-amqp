@@ -1911,6 +1911,7 @@ Queue.prototype._onMethod = function (channel, method, args) {
       // If this is a reconnect, we must re-subscribe our queue listeners.
       var consumerTags = Object.keys(this.consumerTagListeners);
       for (var index in consumerTags) {
+        if(!consumerTags.hasOwnProperty(index)) continue;
         if (this.consumerTagOptions[consumerTags[index]]['state'] === 'closed') {
           this.subscribeRaw(this.consumerTagOptions[consumerTags[index]], this.consumerTagListeners[consumerTags[index]]);
           // Having called subscribeRaw, we are now a new consumer with a new consumerTag.
