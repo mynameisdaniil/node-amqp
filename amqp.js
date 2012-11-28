@@ -1978,6 +1978,8 @@ Queue.prototype._onContentHeader = function (channel, classInfo, weight, propert
   this.currentMessage.size = size;
 
   this.emit('rawMessage', this.currentMessage);
+  if(size === 0)
+    this.currentMessage.emit('end');
 };
 
 Queue.prototype._onContent = function (channel, data) {
