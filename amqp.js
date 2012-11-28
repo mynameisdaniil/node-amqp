@@ -2187,11 +2187,12 @@ Exchange.prototype.publish = function (routingKey, data, options, callback) {
     self._unAcked[self._sequence] = task
     self._sequence++
 
-    if(callback != null){ 
-      task.once('ack',   function(){task.removeAllListeners();callback(false)}); 
-      this.once('error', function(){task.removeAllListeners();callback(true)});
-    }
-  }
+    if(callback != null){
+      var errorCallback = function(){task.removeAllListeners();callback(true)};
+      var exchange = this;
+      task.once('ack',   function(){exchange.removeListener('error', errorCallback); task.removeAllListeners();callback(false)}); 
+      this.once('error', errorCallback);
+    }}
 
   return task
 };
